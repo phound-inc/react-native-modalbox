@@ -64,6 +64,7 @@ var ModalBox = createReactClass({
     backButtonClose: PropTypes.bool,
     easing: PropTypes.func,
     coverScreen: PropTypes.bool,
+    keyboardOpenOffset: PropTypes.number,
     keyboardTopOffset: PropTypes.number,
     onClosed: PropTypes.func,
     onOpened: PropTypes.func,
@@ -85,7 +86,8 @@ var ModalBox = createReactClass({
       backButtonClose: false,
       easing: Easing.elastic(0.8),
       coverScreen: false,
-      keyboardTopOffset: Platform.OS == 'ios' ? 22 : 0
+      keyboardTopOffset: Platform.OS == 'ios' ? 22 : 0,
+      keyboardOpenOffset: 0,
     };
   },
 
@@ -158,7 +160,7 @@ var ModalBox = createReactClass({
     if (!evt) return;
     if (!this.state.isOpen) return;
     var keyboardFrame = evt.endCoordinates;
-    var keyboardHeight = this.state.containerHeight - keyboardFrame.screenY;
+    var keyboardHeight = keyboardFrame.height - this.props.keyboardOpenOffset;
 
     this.setState({ keyboardOffset: keyboardHeight }, () => {
       this.animateOpen();
